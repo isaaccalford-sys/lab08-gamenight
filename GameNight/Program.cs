@@ -17,6 +17,7 @@ string projectFolder = Path.GetFullPath(
 Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
 Directory.SetCurrentDirectory(projectFolder);
 
+//===part 1===
 // variables
 string[] players = File.ReadAllLines(PLAYERS_FILE);
 string[] points = File.ReadAllLines(POINTS_FILE);
@@ -37,6 +38,43 @@ for(int i = 0; i < players.Length; i++)
 System.Console.WriteLine("Leader: " + players[leader] + " with " + points[leader]);
 System.Console.WriteLine("Season total: " + total);
 System.Console.WriteLine();
+
+//===part 2===
+
+string[] tonight = new string[points.Length];
+
+//getting and checking input form user about scores 
+for(int i = 0; i < players.Length; i++)
+{
+     
+ System.Console.Write("Points tonight for " + players[i] + ": ");
+ tonight[i] = Console.ReadLine();
+
+    while(Convert.ToInt32(tonight[i]) > MAX_POINTS || Convert.ToInt32(tonight[i]) < 0)
+    {
+    System.Console.WriteLine("Points must be from 0 to 20.");
+    System.Console.Write("Points tonight for " + players[i] + ": ");
+    tonight[i] = Console.ReadLine();
+    }
+
+    int season = Convert.ToInt32(points[i]) + Convert.ToInt32(tonight[i]);
+    points[i] = season.ToString();
+
+}
+
+File.WriteAllLines(POINTS_FILE, points);
+
+
+//finding the leader
+int newSeasonLeader = LeaderIndex(tonight);
+
+
+//output
+System.Console.WriteLine("Tonight's winner: " + players[newSeasonLeader] + " with " + tonight[newSeasonLeader]);
+System.Console.WriteLine("Saved points.txt.");
+
+
+
 
 //Methods 
 static int LeaderIndex(string[] points)
@@ -67,3 +105,5 @@ static int TotalPoints(string[] points)
     }
     return totalPoints;
 }
+
+
